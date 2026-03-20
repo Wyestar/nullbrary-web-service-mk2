@@ -11,6 +11,7 @@ typescript
 CSS (tailwind)
 react
 tanstack router/query/form
+file-based routing
 
 Database is in ravenDB with a java service layer for HTTP RESTful api interactions. Controlled request and response structures between the service and this server.
 
