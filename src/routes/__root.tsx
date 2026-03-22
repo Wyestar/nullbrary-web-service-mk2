@@ -12,6 +12,7 @@ import * as React from "react";
 import type { QueryClient } from "@tanstack/react-query";
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
 import { NotFound } from "~/components/NotFound";
+import { SidebarForm } from "~/components/SidebarForm";
 import appCss from "~/styles/app.css?url";
 import { seo } from "~/utils/seo";
 
@@ -68,7 +69,7 @@ export const Route = createRootRouteWithContext<{
 function RootComponent() {
   return (
     <RootDocument>
-      <h1>this is root component. main outlet below 3</h1>
+      <h1>this is root component. main outlet below 4</h1>
       <Outlet />
     </RootDocument>
   );
@@ -101,6 +102,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             Large Monsters
           </Link>{" "}
         </div>
+        {/*<SidebarForm />*/}
         <hr />
         {children}
         <TanStackRouterDevtools position="bottom-right" />
