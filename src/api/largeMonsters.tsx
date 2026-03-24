@@ -1,4 +1,4 @@
-import { queryOptions, useMutation } from "@tanstack/react-query";
+import { queryOptions, useQuery, useMutation } from "@tanstack/react-query";
 import { notFound } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import {
@@ -90,13 +90,32 @@ export const getLMAllSimple = () => {
 //     return lm;
 //   });
 
-export const getLMByGameId = (data) => {
+// options are good for using set cache keys and known possible options
+export const getLMByGameIdOptions = (data) => {
   console.info("fetching lm by game id: ", data);
 
   return queryOptions({
-    queryKey: ["largeMonsterByGameIdServer"],
-    queryFn: () => getLMByGameIdPost(data),
+    queryKey: ["lmByGameId"],
+    queryFn: () => getLMByGameIdGet(data),
   });
+};
+
+export const getLMByGameIdGet = async (data) => {
+  const lm = await axios
+    .get("http://localhost:8001/api/nb/", { params: data })
+    .then((res) => {
+      const validatedRes = LargeMonsterListType.parse(res.data);
+      return validatedRes;
+    })
+    .catch((err) => {
+      console.error(err);
+      if (err.status === 404) {
+        throw notFound();
+      }
+      throw err;
+    });
+
+  return lm;
 };
 
 export const getLMByGameIdPost = async (data) => {
@@ -121,18 +140,31 @@ export const getLMByGameIdPost = async (data) => {
 // data = {
 //   "largeMonsterName": "rey dau"
 // }
-export const getLMByName = (data) => {
-  console.info("fetching lm by name 3: ", data);
+
+// query setup
+// 1. Options; takes arg, return queryOptions object
+// 2. Query; useQuery for use in components. when called takes options
+// 3. Req/Fetch; makes api request.
+export const getLMByNameOptions = (data) => {
+  console.info("options lm by name: ", data);
 
   return queryOptions({
-    queryKey: ["largeMonsterByNameServer"],
-    queryFn: () => getLMByNameGet(data),
+    queryKey: ["lmData", data],
+    queryFn: () => getLMByNameReq(data),
   });
+};
+// useQuery(optionsFunc(arg))
+
+// data = { lm-name: "asdfasdf" }
+export const getLMByNameQuery = (data) => {
+  console.info("query lm by name: ", data);
+
+  return useQuery(getLMByNameOptions(data));
 };
 
 // strict-origin-when-cross-origin
 // Access-Control-Allow-Origin
-export const getLMByNameGet = async (data) => {
+export const getLMByNameReq = async (data) => {
   const lm = await axios
     .get("http://localhost:8001/api/nb/", { params: data })
     .then((res) => {

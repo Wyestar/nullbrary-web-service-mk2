@@ -1,32 +1,43 @@
-import { Link } from "@tanstack/react-router";
-import { useMutation } from "@tanstack/react-query";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useQuery, useMutation } from "@tanstack/react-query";
 
 import { useAppForm } from "../forms/sidebarFormHooks.tsx";
-import { getLMByName, getLMByNameGet } from "../api/largeMonsters.tsx";
+import {
+  getLMByNameOptions,
+  getLMByNameQuery,
+  getLMByNameGet,
+} from "../api/largeMonsters.tsx";
 
 export function SidebarForm({ children }: { children?: any }) {
-  const mutation = useMutation({
-    mutationFn: async (value) => {
-      await getLMByName(value);
-    },
-  });
-
+  // const mutation = useMutation({
+  //   mutationFn: async (value) => {
+  //     await getLMByNameGet(value);
+  //   },
+  // });
+  const navigate = useNavigate();
   const form = useAppForm({
     defaultValue: {
-      largeMonsterName: "enter monster name",
+      largeMonsterName: "enter monster name default",
     },
     onSubmit: async ({ value }) => {
-      const params = {
-        "lm-name": value.largeMonsterName,
-        "lm-species": "asdf",
-      };
-      await getLMByNameGet(params);
+      // form onsubmit has 'navigation' property
+      const lmNameLowercase = value.largeMonsterName.toLowerCase();
+      navigate({
+        to: "/largeMonsters/$largeMonsterName",
+        params: { largeMonsterName: lmNameLowercase },
+      });
+
+      // const params = {
+      //   "lm-name": value.largeMonsterName,
+      //   "lm-species": "asdf",
+      // };
+      // await useQuery(getLMByNameOptions(params));
       // Mar 23; how to avoid declaring all req vars before
       // want to use queryOptions
       // don't want to call axios funcs directly in comps
       // how to use mutate with get/post mix
 
-      // await mutation.mutateAsync(value);
+      // await mutation.mutate(value);
     },
   });
 
@@ -44,6 +55,7 @@ export function SidebarForm({ children }: { children?: any }) {
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          e.stopPropagation();
           form.handleSubmit();
         }}
       >
@@ -57,8 +69,8 @@ export function SidebarForm({ children }: { children?: any }) {
           <form.LargeMonsterNameSubmit />
         </form.AppForm>
       </form>
-      <p>lm by name post req success! 2</p>
-      {/*{mutation.isSuccess && <p>lm by name post req success! 2</p>}*/}
+      <p>lm by name request info:</p>
+      {/*{mutation.isSuccess && <p>lm by name post req success</p>}*/}
     </div>
   );
 }

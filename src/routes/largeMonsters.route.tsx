@@ -46,22 +46,25 @@ function LargeMonstersComponent() {
         <div>
           <div>lm page list</div>
           {[...lmAllSimpleData.lm_list].map((lm) => {
-            const lm_game_id_string = lm.lm_game_id.toString();
-            // console.info(lm_game_id_string);
+            const { lm_name_in_user_lang, lm_species } = lm;
+            const lm_name = lm_name_in_user_lang.toLowerCase();
+            // console.info("lm li elem");
+
+            // console.info(asdf);
             return (
-              <li key={lm_game_id_string}>
+              <li key={lm_name}>
                 <>
                   <Link
-                    to="/largeMonsters/$largeMonsterGameId"
+                    to="/largeMonsters/$largeMonsterName"
                     params={{
-                      largeMonsterGameId: lm_game_id_string,
+                      largeMonsterName: lm_name,
                     }}
                     className="block py-1 text-blue-800 hover:text-blue-600"
                     activeProps={{ className: "text-black font-bold" }}
                   >
-                    <div>{lm.lm_name_in_user_lang}</div>
+                    <div>{lm_name}</div>
                   </Link>
-                  {lm.lm_species}
+                  {lm_species}
                 </>
               </li>
             );

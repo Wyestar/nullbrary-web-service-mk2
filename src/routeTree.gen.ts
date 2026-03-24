@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LargeMonstersRouteRouteImport } from './routes/largeMonsters.route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LargeMonstersIndexRouteImport } from './routes/largeMonsters.index'
-import { Route as LargeMonstersLargeMonsterGameIdRouteImport } from './routes/largeMonsters.$largeMonsterGameId'
+import { Route as LargeMonstersLargeMonsterNameRouteImport } from './routes/largeMonsters.$largeMonsterName'
 
 const LargeMonstersRouteRoute = LargeMonstersRouteRouteImport.update({
   id: '/largeMonsters',
@@ -29,29 +29,29 @@ const LargeMonstersIndexRoute = LargeMonstersIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LargeMonstersRouteRoute,
 } as any)
-const LargeMonstersLargeMonsterGameIdRoute =
-  LargeMonstersLargeMonsterGameIdRouteImport.update({
-    id: '/$largeMonsterGameId',
-    path: '/$largeMonsterGameId',
+const LargeMonstersLargeMonsterNameRoute =
+  LargeMonstersLargeMonsterNameRouteImport.update({
+    id: '/$largeMonsterName',
+    path: '/$largeMonsterName',
     getParentRoute: () => LargeMonstersRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/largeMonsters': typeof LargeMonstersRouteRouteWithChildren
-  '/largeMonsters/$largeMonsterGameId': typeof LargeMonstersLargeMonsterGameIdRoute
+  '/largeMonsters/$largeMonsterName': typeof LargeMonstersLargeMonsterNameRoute
   '/largeMonsters/': typeof LargeMonstersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/largeMonsters/$largeMonsterGameId': typeof LargeMonstersLargeMonsterGameIdRoute
+  '/largeMonsters/$largeMonsterName': typeof LargeMonstersLargeMonsterNameRoute
   '/largeMonsters': typeof LargeMonstersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/largeMonsters': typeof LargeMonstersRouteRouteWithChildren
-  '/largeMonsters/$largeMonsterGameId': typeof LargeMonstersLargeMonsterGameIdRoute
+  '/largeMonsters/$largeMonsterName': typeof LargeMonstersLargeMonsterNameRoute
   '/largeMonsters/': typeof LargeMonstersIndexRoute
 }
 export interface FileRouteTypes {
@@ -59,15 +59,15 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/largeMonsters'
-    | '/largeMonsters/$largeMonsterGameId'
+    | '/largeMonsters/$largeMonsterName'
     | '/largeMonsters/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/largeMonsters/$largeMonsterGameId' | '/largeMonsters'
+  to: '/' | '/largeMonsters/$largeMonsterName' | '/largeMonsters'
   id:
     | '__root__'
     | '/'
     | '/largeMonsters'
-    | '/largeMonsters/$largeMonsterGameId'
+    | '/largeMonsters/$largeMonsterName'
     | '/largeMonsters/'
   fileRoutesById: FileRoutesById
 }
@@ -99,23 +99,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LargeMonstersIndexRouteImport
       parentRoute: typeof LargeMonstersRouteRoute
     }
-    '/largeMonsters/$largeMonsterGameId': {
-      id: '/largeMonsters/$largeMonsterGameId'
-      path: '/$largeMonsterGameId'
-      fullPath: '/largeMonsters/$largeMonsterGameId'
-      preLoaderRoute: typeof LargeMonstersLargeMonsterGameIdRouteImport
+    '/largeMonsters/$largeMonsterName': {
+      id: '/largeMonsters/$largeMonsterName'
+      path: '/$largeMonsterName'
+      fullPath: '/largeMonsters/$largeMonsterName'
+      preLoaderRoute: typeof LargeMonstersLargeMonsterNameRouteImport
       parentRoute: typeof LargeMonstersRouteRoute
     }
   }
 }
 
 interface LargeMonstersRouteRouteChildren {
-  LargeMonstersLargeMonsterGameIdRoute: typeof LargeMonstersLargeMonsterGameIdRoute
+  LargeMonstersLargeMonsterNameRoute: typeof LargeMonstersLargeMonsterNameRoute
   LargeMonstersIndexRoute: typeof LargeMonstersIndexRoute
 }
 
 const LargeMonstersRouteRouteChildren: LargeMonstersRouteRouteChildren = {
-  LargeMonstersLargeMonsterGameIdRoute: LargeMonstersLargeMonsterGameIdRoute,
+  LargeMonstersLargeMonsterNameRoute: LargeMonstersLargeMonsterNameRoute,
   LargeMonstersIndexRoute: LargeMonstersIndexRoute,
 }
 
