@@ -5,7 +5,6 @@ export function LargeMonsterNameField({ label }: { label: string }) {
   const field = useFieldContext<string>();
   return (
     <label>
-      <div>lm name input</div>
       <span>{label}</span>
       <input
         value={field.state.value}

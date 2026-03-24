@@ -69,7 +69,10 @@ export const Route = createRootRouteWithContext<{
 function RootComponent() {
   return (
     <RootDocument>
-      <h1>this is root component. main outlet below 4</h1>
+      <h1>
+        this is root component. first child of root document. main outlet below
+        5
+      </h1>
       <Outlet />
     </RootDocument>
   );
@@ -102,7 +105,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             Large Monsters
           </Link>{" "}
         </div>
-        {/*<SidebarForm />*/}
+        <div>
+          <SidebarForm />
+        </div>
         <hr />
         {children}
         <TanStackRouterDevtools position="bottom-right" />

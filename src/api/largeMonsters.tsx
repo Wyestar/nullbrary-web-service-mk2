@@ -118,13 +118,37 @@ export const getLMByGameIdPost = async (data) => {
 };
 
 // this is used in search form
+// data = {
+//   "largeMonsterName": "rey dau"
+// }
 export const getLMByName = (data) => {
-  console.info("fetching lm by name: ", data);
+  console.info("fetching lm by name 3: ", data);
 
   return queryOptions({
     queryKey: ["largeMonsterByNameServer"],
-    queryFn: () => getLMByNamePost(data),
+    queryFn: () => getLMByNameGet(data),
   });
+};
+
+// strict-origin-when-cross-origin
+// Access-Control-Allow-Origin
+export const getLMByNameGet = async (data) => {
+  const lm = await axios
+    .get("http://localhost:8001/api/nb/", { params: data })
+    .then((res) => {
+      const validatedRes = LargeMonsterListType.parse(res.data);
+      console.info("validated res of get req with params", validatedRes);
+      return validatedRes;
+    })
+    .catch((err) => {
+      console.error(err);
+      if (err.status === 404) {
+        throw notFound();
+      }
+      throw err;
+    });
+
+  return lm;
 };
 
 export const getLMByNamePost = async (data) => {
