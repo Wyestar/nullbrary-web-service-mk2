@@ -12,23 +12,14 @@ import {
 
 export const Route = createFileRoute("/largeMonsters")({
   loader: async ({ context }) => {
-    await context.queryClient.ensureQueryData(getLMAllSimple());
+    await context.queryClient.ensureQueryData(getLMAllSimpleOptions());
   },
   // staleTime: 10_000,
   component: LargeMonstersComponent,
 });
 
 function LargeMonstersComponent() {
-  // console.info("lm list comp start");
-
-  const { data: lmAllSimpleData } = useSuspenseQuery(getLMAllSimple());
-  // console.info("lm list comp");
-  // console.info(lmAllSimpleData);
-  // console.info([...lmAllSimpleData.lm_list]);
-
-  // const { largeMonsterGameId } = Route.useParams();
-  // console.info("lm list comp param");
-  // console.info(largeMonsterGameId);
+  const { data: lmAllSimpleData } = useSuspenseQuery(getLMAllSimpleOptions());
 
   const location = useLocation();
   if (location.pathname === "/largeMonsters") {
@@ -48,9 +39,6 @@ function LargeMonstersComponent() {
           {[...lmAllSimpleData.lm_list].map((lm) => {
             const { lm_name_in_user_lang, lm_species } = lm;
             const lm_name = lm_name_in_user_lang.toLowerCase();
-            // console.info("lm li elem");
-
-            // console.info(asdf);
             return (
               <li key={lm_name}>
                 <>

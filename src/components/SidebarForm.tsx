@@ -2,16 +2,12 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 import { useAppForm } from "../forms/sidebarFormHooks.tsx";
-import {
-  getLMByNameOptions,
-  getLMByNameQuery,
-  getLMByNameGet,
-} from "../api/largeMonsters.tsx";
+import { getLMByNameOptions, getLMByNameGet } from "../api/largeMonsters.tsx";
 
 export function SidebarForm({ children }: { children?: any }) {
   // const mutation = useMutation({
   //   mutationFn: async (value) => {
-  //     await getLMByNameGet(value);
+  //     await someAPICall(value);
   //   },
   // });
   const navigate = useNavigate();
@@ -20,22 +16,11 @@ export function SidebarForm({ children }: { children?: any }) {
       largeMonsterName: "enter monster name default",
     },
     onSubmit: async ({ value }) => {
-      // form onsubmit has 'navigation' property
       const lmNameLowercase = value.largeMonsterName.toLowerCase();
       navigate({
         to: "/largeMonsters/$largeMonsterName",
         params: { largeMonsterName: lmNameLowercase },
       });
-
-      // const params = {
-      //   "lm-name": value.largeMonsterName,
-      //   "lm-species": "asdf",
-      // };
-      // await useQuery(getLMByNameOptions(params));
-      // Mar 23; how to avoid declaring all req vars before
-      // want to use queryOptions
-      // don't want to call axios funcs directly in comps
-      // how to use mutate with get/post mix
 
       // await mutation.mutate(value);
     },

@@ -16,26 +16,8 @@ import axios from "redaxios";
 // pass queryKey: ["string id"]
 // queryFn: () => funcFromServer(args)
 
-// Mutation 1, client side func
-// const mutation = useMutation({
-//   mutationFn: funcFromClient
-// })
-// calls any async func that makes api call
-
-// Mutation 2, server side func
-// ie: const $funcFromServer = useServerFn(funcFromServer);
-// const mutation = useMutation({
-//   mutationFn: $funcFromServer
-// })
-// mutation.mutate (can breakout and alias)
-// useAppForm.onSubmit: mutation.mutate(form data)
-// mutation.mutateAsync
-
-// get = server func, usually get
-// fetch = client func, get or post
-// 'server' at end to indicate it is a createServerFn func
 // get all lm. for main /lm page
-export const getLargeMonsterAllSimpleServer = createServerFn({
+export const getLMAllSimpleServer = createServerFn({
   method: "GET",
 })
   .inputValidator(() => {})
@@ -56,120 +38,80 @@ export const getLargeMonsterAllSimpleServer = createServerFn({
     return lmAllSimple ?? null;
   });
 
-// user driven reqs are usualy posts
-// server loaders/prefetch are usually gets
-
-// this runs in createFileRoute loader AND useSuspenseQuery in component
-// this is queryOptions func, this needs to be passed to a query function!
-// can this be used in form mutatoin?
-export const getLMAllSimple = () => {
+export const getLMAllSimpleOptions = () => {
   return queryOptions({
-    queryKey: ["largeMonsterAllSimpleServer"],
-    queryFn: () => getLargeMonsterAllSimpleServer(),
+    queryKey: ["lmAllSimpleServer"],
+    queryFn: () => getLMAllSimpleServer(),
   });
 };
 
-// export const getSOMETHINGServer = createServerFn({
-//   method: "POST",
-// })
-//   .inputValidator(() => {})
-//   .handler(async (data) => {
-//     const lm = await axios
-//       .post("http://localhost:8001/api/nb/", data)
-//       .then((res) => {
-//         const validatedRes = _Type.parse(res.data);
-//         return validatedRes;
-//       })
-//       .catch((err) => {
-//         console.error(err);
-//         if (err.status === 404) {
-//           throw notFound();
-//         }
-//         throw err;
-//       });
-//     return lm;
-//   });
+// getLMAllAdvanced
 
-// options are good for using set cache keys and known possible options
-export const getLMByGameIdOptions = (data) => {
-  console.info("fetching lm by game id: ", data);
+// =============================================
 
-  return queryOptions({
-    queryKey: ["lmByGameId"],
-    queryFn: () => getLMByGameIdGet(data),
-  });
-};
-
-export const getLMByGameIdGet = async (data) => {
-  const lm = await axios
-    .get("http://localhost:8001/api/nb/", { params: data })
-    .then((res) => {
-      const validatedRes = LargeMonsterListType.parse(res.data);
-      return validatedRes;
-    })
-    .catch((err) => {
-      console.error(err);
-      if (err.status === 404) {
-        throw notFound();
-      }
-      throw err;
-    });
-
-  return lm;
-};
-
-export const getLMByGameIdPost = async (data) => {
-  const lm = await axios
-    .post("http://localhost:8001/api/nb/largemonster", data)
-    .then((res) => {
-      const validatedRes = LargeMonsterType.parse(res.data);
-      return validatedRes;
-    })
-    .catch((err) => {
-      console.error(err);
-      if (err.status === 404) {
-        throw notFound();
-      }
-      throw err;
-    });
-
-  return lm;
-};
-
-// this is used in search form
-// data = {
-//   "largeMonsterName": "rey dau"
-// }
-
-// query setup
-// 1. Options; takes arg, return queryOptions object
-// 2. Query; useQuery for use in components. when called takes options
-// 3. Req/Fetch; makes api request.
 export const getLMByNameOptions = (data) => {
   console.info("options lm by name: ", data);
 
+  // options are good for using set cache keys
+  // and known possible options
+  // if from server query will have 'Server' at end of key
   return queryOptions({
-    queryKey: ["lmData", data],
+    queryKey: ["lmByName", data],
     queryFn: () => getLMByNameReq(data),
   });
 };
-// useQuery(optionsFunc(arg))
 
-// data = { lm-name: "asdfasdf" }
-export const getLMByNameQuery = (data) => {
-  console.info("query lm by name: ", data);
-
-  return useQuery(getLMByNameOptions(data));
-};
-
-// strict-origin-when-cross-origin
-// Access-Control-Allow-Origin
 export const getLMByNameReq = async (data) => {
   const lm = await axios
     .get("http://localhost:8001/api/nb/", { params: data })
     .then((res) => {
       const validatedRes = LargeMonsterListType.parse(res.data);
-      console.info("validated res of get req with params", validatedRes);
+      return validatedRes;
+    })
+    .catch((err) => {
+      console.error(err);
+      if (err.status === 404) {
+        throw notFound();
+      }
+      throw err;
+    });
+
+  return lm;
+};
+
+// API notes
+// 1. Options; takes arg, return queryOptions object
+// 2. Query; useQuery for use in components. when called takes options
+// 3. Req; client side req, direct axios usage
+// 4. Server; server side with createServerFn
+
+// useQuery(optionsFunc(arg))
+
+// strict-origin-when-cross-origin
+// Access-Control-Allow-Origin
+
+// Mutation 1, client side func
+// const mutation = useMutation({
+//   mutationFn: funcFromClient
+// })
+// calls any async func that makes api call
+
+// Mutation 2, server side func
+// ie: const $funcFromServer = useServerFn(funcFromServer);
+// const mutation = useMutation({
+//   mutationFn: $funcFromServer
+// })
+// mutation.mutate (can breakout and alias)
+// useAppForm.onSubmit: mutation.mutate(form data)
+// mutation.mutateAsync
+
+// =========================================================
+// internal admin api
+export const getLMByGameIdPost = async (data) => {
+  const lm = await axios
+    .post("http://localhost:8001/api/nb/largemonster", data)
+    .then((res) => {
+      const validatedRes = LargeMonsterType.parse(res.data);
       return validatedRes;
     })
     .catch((err) => {
